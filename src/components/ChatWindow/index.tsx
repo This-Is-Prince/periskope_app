@@ -87,7 +87,7 @@ export default function ChatWindow({ chatId }: Props) {
 
   useEffect(() => {
     if (!messages.length) return;
-    scrollToBottom();
+    // scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
@@ -95,7 +95,14 @@ export default function ChatWindow({ chatId }: Props) {
 
     // Subscribe to new messages
     const subscription = messageService.subscribeToMessages(chatId, (newMessage) => {
-      setMessages(prev => [...prev, newMessage as MessageWithSender]);
+      setMessages(prev => {
+        // Check if message already exists to avoid duplicates
+        const messageExists = prev.some(msg => msg.id === (newMessage as MessageWithSender).id);
+        if (messageExists) {
+          return prev;
+        }
+        return [...prev, newMessage as MessageWithSender];
+      });
     });
 
     return () => {
@@ -115,6 +122,7 @@ export default function ChatWindow({ chatId }: Props) {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -126,7 +134,8 @@ export default function ChatWindow({ chatId }: Props) {
     try {
       const message = await messageService.sendMessage(chatId, user.id, newMessage.trim());
       if (message) {
-        // Message will be added via real-time subscription
+        // Immediately add the message to state
+        setMessages(prev => [...prev, message]);
         setNewMessage('');
       }
     } catch (error) {

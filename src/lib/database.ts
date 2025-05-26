@@ -110,7 +110,7 @@ export const messageService = {
 
   // Subscribe to new messages in a chat
   subscribeToMessages(chatId: string, callback: (message: unknown) => void) {
-    return supabase
+    const channel = supabase
       .channel(`messages:${chatId}`)
       .on(
         'postgres_changes',
@@ -121,8 +121,14 @@ export const messageService = {
           filter: `chat_id=eq.${chatId}`
         },
         async (payload) => {
+          // Check if the payload has the expected structure
+          if (!payload.new || !payload.new.id) {
+            console.error('Invalid payload structure:', payload)
+            return
+          }
+          
           // Fetch the complete message with sender details
-          const { data } = await supabase
+          const { data, error } = await supabase
             .from('messages')
             .select(`
               *,
@@ -131,12 +137,25 @@ export const messageService = {
             .eq('id', payload.new.id)
             .single()
 
+          if (error) {
+            console.error('Error fetching message details:', error)
+            return
+          }
+
           if (data) {
             callback(data)
+          } else {
+            console.error('No data returned for message:', payload.new.id)
           }
         }
       )
-      .subscribe()
+      .subscribe((status, error) => {
+        if (error) {
+          console.error('Subscription error:', error)
+        }
+      })
+
+    return channel
   }
 }
 

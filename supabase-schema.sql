@@ -43,6 +43,9 @@ CREATE TABLE IF NOT EXISTS messages (
   is_deleted BOOLEAN DEFAULT FALSE
 );
 
+-- Enable real-time for the messages table
+ALTER PUBLICATION supabase_realtime ADD TABLE messages;
+
 -- Create chat_tags table
 CREATE TABLE IF NOT EXISTS chat_tags (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
