@@ -117,7 +117,7 @@ export default function LoginPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="18005550123"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border text-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -145,7 +145,7 @@ export default function LoginPage() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   placeholder="123456"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border text-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -175,8 +175,6 @@ export default function LoginPage() {
             </button>
           </form>
         )}
-
-
       </div>
     </div>
   )

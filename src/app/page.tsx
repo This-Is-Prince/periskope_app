@@ -6,11 +6,12 @@ import { useAuth } from '@/lib/auth'
 import Sidebar from "@/components/Sidebar";
 import ChatListPanel from "@/components/ChatListPanel";
 import ChatWindow from "@/components/ChatWindow";
+import ChatHeader from "@/components/ChatHeader";
 
-export default function Home() {
+export default function HomePage() {
   const { user, loading } = useAuth()
   const router = useRouter()
-  const [selectedChatId, setSelectedChatId] = useState("chat1111-1111-1111-1111-111111111111");
+  const [selectedChatId, setSelectedChatId] = useState("11111111-1111-1111-1111-111111111111");
 
   useEffect(() => {
     if (!loading && !user) {
@@ -34,18 +35,31 @@ export default function Home() {
   }
 
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex h-screen w-full overflow-hidden">
       {/* Sidebar */}
-      <Sidebar />
-      
-      {/* Left Chat List */}
-      <div className="w-[350px] border-r border-gray-200 bg-white">
-        <ChatListPanel selectedChatId={selectedChatId} setSelectedChatId={setSelectedChatId} />
+      <div className="w-[60px] bg-white border-r border-gray-200">
+        <Sidebar />
       </div>
 
-      {/* Right Chat Window */}
-      <div className="flex-1 bg-[#ece5dd]">
-        <ChatWindow chatId={selectedChatId} />
+      {/* Main Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <ChatHeader />
+
+        {/* Content below header */}
+        <div className="flex flex-1">
+          <div className="flex w-full h-full">
+            {/* Left Chat List */}
+            <div className="w-[350px] border-r border-gray-200 bg-white">
+              <ChatListPanel selectedChatId={selectedChatId} setSelectedChatId={setSelectedChatId} />
+            </div>
+
+            {/* Right Chat Window */}
+            <div className="flex-1 bg-[#ece5dd]">
+              <ChatWindow chatId={selectedChatId} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

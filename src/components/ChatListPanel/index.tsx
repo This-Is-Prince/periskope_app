@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/auth";
 import { chatService } from "@/lib/database";
 import FilterBar from "./FilterBar";
@@ -36,24 +36,22 @@ export default function ChatListPanel({ selectedChatId, setSelectedChatId }: Pro
   const [chats, setChats] = useState<ChatWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      loadChats();
-    }
-  }, [user]);
-
-  const loadChats = async () => {
-    if (!user) return;
+  const loadChats = useCallback(async () => {
+    if (!user?.id) return;
     
     try {
-      const userChats = await chatService.getUserChats(user.id);
+      const userChats = await chatService.getUserChats();
       setChats(userChats);
     } catch (error) {
       console.error('Error loading chats:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    loadChats();
+  }, [loadChats]);
 
   const getChatDisplayName = (chat: ChatWithDetails) => {
     if (chat.is_group && chat.name) {

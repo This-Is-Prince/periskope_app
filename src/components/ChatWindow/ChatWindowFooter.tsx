@@ -12,17 +12,38 @@ import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoSend } from "react-icons/io5";
 import Image from "next/image";
 
-export default function ChatWindowFooter() {
+interface Props {
+  newMessage: string;
+  setNewMessage: (message: string) => void;
+  onSendMessage: () => void;
+  disabled: boolean;
+}
+
+export default function ChatWindowFooter({ newMessage, setNewMessage, onSendMessage, disabled }: Props) {
   return (
     <div className="absolute bottom-10 w-full pl-3 pr-5 py-2 bg-white border-t border-gray-200 ">
       <div className="flex items-center gap-x-2 justify-between mb-2">
         <input
           type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              onSendMessage();
+            }
+          }}
           placeholder="Message..."
           className="flex-1 px-4 py-2 mr-2 rounded-full bg-gray-100 text-gray-800 text-sm outline-none"
+          disabled={disabled}
         />
-          <IoSend className="text-green-600 text-xl cursor-pointer" />
-      
+        <button
+          onClick={onSendMessage}
+          disabled={!newMessage?.trim() || disabled}
+          className="border-none outline-none flex items-center justify-center cursor-pointer"
+        >
+          <IoSend className="text-green-600 text-xl" />
+        </button>
       </div>
 
       {/* Row 2: Action icons */}

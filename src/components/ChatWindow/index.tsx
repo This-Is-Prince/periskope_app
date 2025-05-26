@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/lib/auth";
 import { messageService, chatService } from "@/lib/database";
 import { supabase } from "@/lib/supabase";
+import ChatWindowFooter from "./ChatWindowFooter";
 import ChatWindowHeader from "./ChatWindowHeader";
 import ChatWindowSidebar from "./ChatWindowSidebar";
 
@@ -46,31 +47,8 @@ export default function ChatWindow({ chatId }: Props) {
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (chatId && user) {
-      loadChatData();
-    }
-  }, [chatId, user]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    if (!chatId) return;
-
-    // Subscribe to new messages
-    const subscription = messageService.subscribeToMessages(chatId, (newMessage) => {
-      setMessages(prev => [...prev, newMessage as MessageWithSender]);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [chatId]);
-
-  const loadChatData = async () => {
-    if (!user || !chatId) return;
+  const loadChatData = useCallback(async () => {
+    if (!user?.id || !chatId) return;
 
     try {
       setLoading(true);
@@ -101,7 +79,28 @@ export default function ChatWindow({ chatId }: Props) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [chatId, user?.id]);
+
+  useEffect(() => {
+    loadChatData();
+  }, [loadChatData]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    if (!chatId) return;
+
+    // Subscribe to new messages
+    const subscription = messageService.subscribeToMessages(chatId, (newMessage) => {
+      setMessages(prev => [...prev, newMessage as MessageWithSender]);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [chatId]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -121,13 +120,6 @@ export default function ChatWindow({ chatId }: Props) {
       console.error('Error sending message:', error);
     } finally {
       setSending(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
     }
   };
 
@@ -225,26 +217,12 @@ export default function ChatWindow({ chatId }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 bg-white p-4">
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              disabled={sending}
-            />
-            <button
-              onClick={handleSendMessage}
-              disabled={!newMessage.trim() || sending}
-              className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {sending ? 'Sending...' : 'Send'}
-            </button>
-          </div>
-        </div>
+        <ChatWindowFooter
+          disabled={sending}
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          onSendMessage={handleSendMessage}
+        />
       </div>
 
       {/* Right Sidebar */}

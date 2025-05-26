@@ -2,16 +2,15 @@ import { supabase } from './supabase'
 
 export const chatService = {
   // Get all chats for the current user
-  async getUserChats(userId: string) {
+  async getUserChats() {
     const { data, error } = await supabase
       .from('chats')
       .select(`
         *,
-        chat_participants!inner(user_id, role),
+        chat_participants(user_id, role, users(id, name, phone, avatar_url)),
         chat_tags(tag),
         last_message_by_user:users!chats_last_message_by_fkey(name)
       `)
-      .eq('chat_participants.user_id', userId)
       .order('last_message_at', { ascending: false, nullsFirst: false })
 
     if (error) {
