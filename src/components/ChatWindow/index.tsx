@@ -85,10 +85,10 @@ export default function ChatWindow({ chatId }: Props) {
     loadChatData();
   }, [loadChatData]);
 
-  useEffect(() => {
-    if (!messages.length) return;
-    scrollToBottom();
-  }, [messages]);
+  // useEffect(() => {
+  //   if (!messages.length) return;
+  //   scrollToBottom();
+  // }, [messages]);
 
   useEffect(() => {
     if (!chatId) return;
@@ -122,6 +122,7 @@ export default function ChatWindow({ chatId }: Props) {
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
