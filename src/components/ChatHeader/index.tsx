@@ -10,12 +10,13 @@ import { HiOutlineQuestionMarkCircle } from "react-icons/hi";
 import { PiBellSlashFill } from "react-icons/pi";
 
 const headerButtons = [
-    { icon: <TbRefreshDot />, label: "Refresh" },
-    { icon: <HiOutlineQuestionMarkCircle />, label: "Help" },
+    { icon: <TbRefreshDot />, label: "Refresh", ariaLabel: "Refresh chats" },
+    { icon: <HiOutlineQuestionMarkCircle />, label: "Help", ariaLabel: "Get help" },
     {
       icon: <div className="w-2 h-2 bg-yellow-400 rounded-full" />,
       label: "5 / 6 phones",
       dropdown: true,
+      ariaLabel: "Phone status: 5 of 6 connected"
     },
     {
       icon: (
@@ -24,6 +25,7 @@ const headerButtons = [
         </div>
       ),
       label: "",
+      ariaLabel: "Download desktop app"
     },
     {
       icon: (
@@ -32,6 +34,7 @@ const headerButtons = [
         </div>
       ),
       label: "",
+      ariaLabel: "Notifications disabled"
     },
     {
       icon: (
@@ -41,31 +44,32 @@ const headerButtons = [
         </div>
       ),
       label: "",
+      ariaLabel: "View list"
     },
   ];
   
 
 export default function ChatHeader() {
   return (
-    <div className="h-[52px] py-1.5 bg-white border-b border-gray-200 px-4 flex items-center justify-between">
-      <div className="flex items-center gap-2 text-gray-500 font-semibold text-base">
+    <header className="h-[52px] py-1.5 bg-white border-b border-gray-200 px-4 flex items-center justify-between">
+      <h1 className="flex items-center gap-2 text-gray-500 font-semibold text-base">
         <FaComments />
         <span>chats</span>
-      </div>
+      </h1>
 
-      <div className="flex items-center gap-3 text-sm">
-        {headerButtons.map(({ icon, label, dropdown }, i) => (
+      <nav className="flex items-center gap-3 text-sm" aria-label="Chat actions">
+        {headerButtons.map(({ icon, label, dropdown, ariaLabel }, i) => (
           <button
             key={i}
             className="flex items-center text-[12px] font-semibold gap-1 px-3 py-1 bg-white border border-gray-300 rounded-[4px] text-gray-500 hover:text-black"
+            aria-label={ariaLabel}
           >
             {icon}
             {label && <span>{label}</span>}
-            {dropdown && <span className="text-xs">▾</span>}
+            {dropdown && <span className="text-xs" aria-hidden="true">▾</span>}
           </button>
         ))}
-
-      </div>
-    </div>
+      </nav>
+    </header>
   );
 }

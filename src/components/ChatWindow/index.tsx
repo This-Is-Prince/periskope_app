@@ -106,12 +106,12 @@ export default function ChatWindow({ chatId }: Props) {
   // Show placeholder if no chat is selected
   if (!chatId) {
     return (
-      <section className="flex h-screen w-full items-center justify-center bg-[#ece5dd]">
+      <main className="flex h-screen w-full items-center justify-center bg-[#ece5dd]">
         <div className="text-center">
           <p className="text-gray-500 text-lg mb-2">Select a chat to start messaging</p>
           <p className="text-gray-400 text-sm">Choose a conversation from the list</p>
         </div>
-      </section>
+      </main>
     );
   }
 
@@ -172,19 +172,19 @@ export default function ChatWindow({ chatId }: Props) {
 
   if (loading) {
     return (
-      <section className="flex h-screen w-full items-center justify-center">
+      <main className="flex h-screen w-full items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
           <p className="text-sm text-gray-500">Loading chat...</p>
         </div>
-      </section>
+      </main>
     );
   }
 
   return (
-    <section className="flex h-screen w-full">
+    <main className="flex h-screen w-full">
       {/* Main Chat Column */}
-      <div className="relative flex flex-col flex-1">
+      <section className="relative flex flex-col flex-1">
         {/* Header */}
         <ChatWindowHeader
           chatName={getChatName()}
@@ -192,9 +192,9 @@ export default function ChatWindow({ chatId }: Props) {
         />
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto bg-[url('/bg-img.jpg')] bg-cover bg-center p-4 text-sm font-semibold">
+        <section className="flex-1 overflow-y-auto bg-[url('/bg-img.jpg')] bg-cover bg-center p-4 text-sm font-semibold" role="log" aria-label="Chat messages" aria-live="polite">
           {messages.map((message) => (
-            <div
+            <article
               key={message.id}
               className={`mb-4 flex ${isMyMessage(message) ? 'justify-end' : 'justify-start'}`}
             >
@@ -206,28 +206,28 @@ export default function ChatWindow({ chatId }: Props) {
                 }`}
               >
                 {!isMyMessage(message) && chatDetails?.is_group && (
-                  <p className="text-xs font-semibold mb-1 text-green-600">
+                  <header className="text-xs font-semibold mb-1 text-green-600">
                     {message.sender.name}
-                  </p>
+                  </header>
                 )}
                 <p className="break-words">{message.content}</p>
-                <p className={`text-xs mt-1 ${
+                <footer className={`text-xs mt-1 ${
                   isMyMessage(message) ? 'text-green-100' : 'text-gray-500'
                 }`}>
-                  {formatMessageTime(message.created_at)}
-                </p>
+                  <time dateTime={message.created_at}>{formatMessageTime(message.created_at)}</time>
+                </footer>
               </div>
-            </div>
+            </article>
           ))}
           
           {messages.length === 0 && (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center h-full" role="status">
               <p className="text-gray-500">No messages yet. Start the conversation!</p>
             </div>
           )}
           
           <div ref={messagesEndRef} />
-        </div>
+        </section>
 
         {/* Footer */}
         <ChatWindowFooter
@@ -236,10 +236,10 @@ export default function ChatWindow({ chatId }: Props) {
           setNewMessage={setNewMessage}
           onSendMessage={handleSendMessage}
         />
-      </div>
+      </section>
 
       {/* Right Sidebar */}
       <ChatWindowSidebar />
-    </section>
+    </main>
   );
 }

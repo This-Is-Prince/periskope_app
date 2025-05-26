@@ -21,12 +21,12 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="text-center">
+      <main className="min-h-screen flex items-center justify-center bg-gray-100">
+        <article className="text-center">
           <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
+        </article>
+      </main>
     )
   }
 
@@ -35,14 +35,14 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <main className="flex h-screen w-full overflow-hidden">
       {/* Sidebar */}
-      <div className="w-[60px] bg-white border-r border-gray-200">
+      <aside className="w-[60px] bg-white border-r border-gray-200">
         <Sidebar />
-      </div>
+      </aside>
 
       {/* Main Area */}
-      <div className="flex-1 flex flex-col">
+      <section className="flex-1 flex flex-col">
         {/* Header */}
         <ChatHeader />
 
@@ -50,17 +50,17 @@ export default function HomePage() {
         <div className="flex flex-1">
           <div className="flex w-full h-full">
             {/* Left Chat List */}
-            <div className="w-[350px] border-r border-gray-200 bg-white">
+            <aside className="w-[350px] border-r border-gray-200 bg-white">
               <ChatListPanel selectedChatId={selectedChatId} setSelectedChatId={setSelectedChatId} />
-            </div>
+            </aside>
 
             {/* Right Chat Window */}
-            <div className="flex-1 bg-[#ece5dd]">
+            <section className="flex-1 bg-[#ece5dd]">
               <ChatWindow chatId={selectedChatId} />
-            </div>
+            </section>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

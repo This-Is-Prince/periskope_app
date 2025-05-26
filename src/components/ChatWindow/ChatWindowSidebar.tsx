@@ -13,25 +13,37 @@ import { PiMagicWandLight } from "react-icons/pi";
 import { TbCategory2 } from "react-icons/tb";
 import { BiLogOutCircle } from "react-icons/bi";
 
-const icons = [
-  BiLogOutCircle,
-  FiRefreshCw,
-  FiEdit3,
-  FiAlignJustify,
-  TbCategory2,
-  PiMagicWandLight,
-  FiUsers,
-  FiAtSign,
-  FiImage,
-  HiMiniBars3BottomLeft,
+const sidebarActions = [
+  { Icon: BiLogOutCircle, label: "Sign out" },
+  { Icon: FiRefreshCw, label: "Refresh" },
+  { Icon: FiEdit3, label: "Edit" },
+  { Icon: FiAlignJustify, label: "Align" },
+  { Icon: TbCategory2, label: "Categories" },
+  { Icon: PiMagicWandLight, label: "Magic tools" },
+  { Icon: FiUsers, label: "Participants" },
+  { Icon: FiAtSign, label: "Mentions" },
+  { Icon: FiImage, label: "Media" },
+  { Icon: HiMiniBars3BottomLeft, label: "More options" },
 ];
 
 export default function ChatWindowSidebar() {
   return (
-    <div className="w-[40px] h-full bg-white border-l border-gray-200 flex flex-col items-center py-4 gap-6 text-gray-400 text-lg">
-      {icons.map((Icon, index) => (
-        <Icon key={index} className="cursor-pointer hover:text-black" />
-      ))}
-    </div>
+    <aside className="w-[40px] h-full bg-white border-l border-gray-200 flex flex-col items-center py-4 gap-6 text-gray-400 text-lg" aria-label="Chat actions">
+      <nav>
+        <ul className="flex flex-col items-center gap-6" role="list">
+          {sidebarActions.map(({ Icon, label }, index) => (
+            <li key={index}>
+              <button 
+                className="cursor-pointer hover:text-black transition-colors" 
+                aria-label={label}
+                title={label}
+              >
+                <Icon />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
   );
 }

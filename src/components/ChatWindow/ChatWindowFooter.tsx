@@ -21,8 +21,8 @@ interface Props {
 
 export default function ChatWindowFooter({ newMessage, setNewMessage, onSendMessage, disabled }: Props) {
   return (
-    <div className="absolute bottom-10 w-full pl-3 pr-5 py-2 bg-white border-t border-gray-200 ">
-      <div className="flex items-center gap-x-2 justify-between mb-2">
+    <footer className="absolute bottom-10 w-full pl-3 pr-5 py-2 bg-white border-t border-gray-200">
+      <form onSubmit={(e) => { e.preventDefault(); onSendMessage(); }} className="flex items-center gap-x-2 justify-between mb-2">
         <input
           type="text"
           value={newMessage}
@@ -36,36 +36,51 @@ export default function ChatWindowFooter({ newMessage, setNewMessage, onSendMess
           placeholder="Message..."
           className="flex-1 px-4 py-2 mr-2 rounded-full bg-gray-100 text-gray-800 text-sm outline-none"
           disabled={disabled}
+          aria-label="Type a message"
         />
         <button
-          onClick={onSendMessage}
+          type="submit"
           disabled={!newMessage?.trim() || disabled}
           className="border-none outline-none flex items-center justify-center cursor-pointer"
+          aria-label="Send message"
         >
           <IoSend className="text-green-600 text-xl" />
         </button>
-      </div>
+      </form>
 
       {/* Row 2: Action icons */}
-      <div className="flex items-center justify-between  ">
+      <nav className="flex items-center justify-between" aria-label="Message actions">
         <div className="flex items-center gap-x-[22px] px-2">
-        <FiPaperclip className="text-gray-500 text-lg cursor-pointer" />
-        <FiSmile className="text-gray-500 text-lg cursor-pointer" />
-        <FiClock className="text-gray-500 text-lg cursor-pointer" />
-        <PiClockCounterClockwiseBold className="text-gray-500 text-lg cursor-pointer" />
-        <BsStars className="text-gray-500 text-lg cursor-pointer" />
-        <HiOutlineMenuAlt2 className="text-gray-500 text-lg cursor-pointer" />
-        <FiMic className="text-gray-400 text-lg cursor-pointer font-semibold" />
-      </div>
-          <div className="border rounded-[4px] px-2 py-1 flex items-center gap-5 text-xs font-semibold text-green-600">
-            <div className="flex items-center gap-1">
-
+          <button type="button" aria-label="Attach file" className="text-gray-500 text-lg cursor-pointer hover:text-gray-700">
+            <FiPaperclip />
+          </button>
+          <button type="button" aria-label="Add emoji" className="text-gray-500 text-lg cursor-pointer hover:text-gray-700">
+            <FiSmile />
+          </button>
+          <button type="button" aria-label="Schedule message" className="text-gray-500 text-lg cursor-pointer hover:text-gray-700">
+            <FiClock />
+          </button>
+          <button type="button" aria-label="Message history" className="text-gray-500 text-lg cursor-pointer hover:text-gray-700">
+            <PiClockCounterClockwiseBold />
+          </button>
+          <button type="button" aria-label="AI assistant" className="text-gray-500 text-lg cursor-pointer hover:text-gray-700">
+            <BsStars />
+          </button>
+          <button type="button" aria-label="More options" className="text-gray-500 text-lg cursor-pointer hover:text-gray-700">
+            <HiOutlineMenuAlt2 />
+          </button>
+          <button type="button" aria-label="Voice message" className="text-gray-400 text-lg cursor-pointer font-semibold hover:text-gray-600">
+            <FiMic />
+          </button>
+        </div>
+        <div className="border rounded-[4px] px-2 py-1 flex items-center gap-5 text-xs font-semibold text-green-600">
+          <div className="flex items-center gap-1">
             <Image src="/logo.png" alt="Logo" width={16} height={16} />
             Periskope
-            </div>
-            <span className="text-xs text-gray-400 ml-1">▾</span>
           </div>
+          <span className="text-xs text-gray-400 ml-1" aria-hidden="true">▾</span>
         </div>
-    </div>
+      </nav>
+    </footer>
   );
 }
