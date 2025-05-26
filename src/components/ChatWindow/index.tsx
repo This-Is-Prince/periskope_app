@@ -87,7 +87,7 @@ export default function ChatWindow({ chatId }: Props) {
 
   useEffect(() => {
     if (!messages.length) return;
-    // scrollToBottom();
+    scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
@@ -122,7 +122,6 @@ export default function ChatWindow({ chatId }: Props) {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -193,7 +192,7 @@ export default function ChatWindow({ chatId }: Props) {
   return (
     <main className="flex h-screen w-full">
       {/* Main Chat Column */}
-      <section className="relative flex flex-col flex-1">
+      <section className="relative flex flex-col flex-1 h-full">
         {/* Header */}
         <ChatWindowHeader
           chatName={getChatName()}
@@ -201,7 +200,7 @@ export default function ChatWindow({ chatId }: Props) {
         />
 
         {/* Messages Area */}
-        <section className="flex-1 overflow-y-auto bg-[url('/bg-img.jpg')] bg-cover bg-center p-4 text-sm font-semibold" role="log" aria-label="Chat messages" aria-live="polite">
+        <section className="flex-1 overflow-y-auto bg-[url('/bg-img.jpg')] bg-cover bg-center p-4 text-sm font-semibold pb-32" role="log" aria-label="Chat messages" aria-live="polite">
           {messages.map((message) => (
             <article
               key={message.id}
