@@ -86,6 +86,7 @@ export default function ChatWindow({ chatId }: Props) {
   }, [loadChatData]);
 
   useEffect(() => {
+    if (!messages.length) return;
     scrollToBottom();
   }, [messages]);
 
@@ -101,6 +102,18 @@ export default function ChatWindow({ chatId }: Props) {
       subscription.unsubscribe();
     };
   }, [chatId]);
+
+  // Show placeholder if no chat is selected
+  if (!chatId) {
+    return (
+      <section className="flex h-screen w-full items-center justify-center bg-[#ece5dd]">
+        <div className="text-center">
+          <p className="text-gray-500 text-lg mb-2">Select a chat to start messaging</p>
+          <p className="text-gray-400 text-sm">Choose a conversation from the list</p>
+        </div>
+      </section>
+    );
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

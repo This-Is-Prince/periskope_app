@@ -57,7 +57,13 @@ export const chatService = {
 
 export const messageService = {
   // Get messages for a chat
-  async getChatMessages(chatId: string) {
+  async getChatMessages(chatId: string, limit: number = 100) {
+    // Early return if no chatId
+    if (!chatId) {
+      console.warn('No chatId provided to getChatMessages');
+      return [];
+    }
+    
     const { data, error } = await supabase
       .from('messages')
       .select(`
@@ -66,14 +72,16 @@ export const messageService = {
       `)
       .eq('chat_id', chatId)
       .eq('is_deleted', false)
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
+      .limit(limit)
 
     if (error) {
       console.error('Error fetching messages:', error)
       return []
     }
 
-    return data || []
+    // Reverse to show oldest first
+    return (data || []).reverse();
   },
 
   // Send a message

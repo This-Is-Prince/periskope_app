@@ -127,51 +127,49 @@ export default function ChatListPanel({ selectedChatId, setSelectedChatId }: Pro
           const contacts = getContactsDisplay(chat);
 
           return (
-            <div
+            <button
               key={chat.id}
               onClick={() => setSelectedChatId(chat.id)}
-              className={`px-3 py-2 cursor-pointer border-b border-gray-100 hover:bg-[#f5f5f5] ${
+              className={`outline-none flex w-full gap-2 items-start px-3 py-2 cursor-pointer border-b border-gray-100 hover:bg-[#f5f5f5] ${
                 selectedChatId === chat.id ? "bg-gray-200" : ""
               }`}
             >
-              <div className="flex gap-2 items-start">
-                {/* Avatar */}
-                <div className="w-8 h-8 rounded-full bg-red-400 text-white flex items-center justify-center text-[11px] font-bold uppercase">
-                  {avatar}
+              {/* Avatar */}
+              <div className="w-8 h-8 rounded-full bg-red-400 text-white flex items-center justify-center text-[11px] font-bold uppercase">
+                {avatar}
+              </div>
+
+              {/* Main Chat Info */}
+              <div className="flex-1">
+                <div className="flex justify-between">
+                  <p className="text-black text-[13px]">{displayName}</p>
+                  <div className="flex items-center gap-1">
+                    {visibleTags.map((tag: string, i: number) => (
+                      <TagBadge key={i} tag={tag} />
+                    ))}
+                    {tagExtra && (
+                      <span className="text-[9px] text-gray-400">
+                        {tagExtra}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
-                {/* Main Chat Info */}
-                <div className="flex-1">
-                  <div className="flex justify-between">
-                    <p className="text-black text-[13px]">{displayName}</p>
-                    <div className="flex items-center gap-1">
-                      {visibleTags.map((tag: string, i: number) => (
-                        <TagBadge key={i} tag={tag} />
-                      ))}
-                      {tagExtra && (
-                        <span className="text-[9px] text-gray-400">
-                          {tagExtra}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                <p className="text-gray-500 text-[12px] truncate">
+                  {chat.last_message_by_user?.name && chat.last_message_by_user.name !== displayName
+                    ? `${chat.last_message_by_user.name}: ${trimmedMessage}`
+                    : trimmedMessage}
+                </p>
 
-                  <p className="text-gray-500 text-[12px] truncate">
-                    {chat.last_message_by_user?.name && chat.last_message_by_user.name !== displayName
-                      ? `${chat.last_message_by_user.name}: ${trimmedMessage}`
-                      : trimmedMessage}
-                  </p>
-
-                  <div className="flex justify-between mt-1 text-[11px] text-gray-400">
-                    <span className="bg-[#f5f5f5] px-1 py-[0.5px] rounded-md">
-                      📞 {contacts.primary}
-                      {contacts.extra && <span className="ml-1">{contacts.extra}</span>}
-                    </span>
-                    <span>{formattedDate}</span>
-                  </div>
+                <div className="flex justify-between mt-1 text-[11px] text-gray-400">
+                  <span className="bg-[#f5f5f5] px-1 py-[0.5px] rounded-md">
+                    📞 {contacts.primary}
+                    {contacts.extra && <span className="ml-1">{contacts.extra}</span>}
+                  </span>
+                  <span>{formattedDate}</span>
                 </div>
               </div>
-            </div>
+            </button>
           );
         })}
         

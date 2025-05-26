@@ -11,7 +11,7 @@ import ChatHeader from "@/components/ChatHeader";
 export default function HomePage() {
   const { user, loading } = useAuth()
   const router = useRouter()
-  const [selectedChatId, setSelectedChatId] = useState("11111111-1111-1111-1111-111111111111");
+  const [selectedChatId, setSelectedChatId] = useState("");
 
   useEffect(() => {
     if (!loading && !user) {
